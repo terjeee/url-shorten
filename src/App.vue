@@ -1,15 +1,15 @@
 <script lang="ts">
-  import BgShortenDesktop from "/images/BgShortenDesktop.vue";
-  import BgShortenMobile from "../public/images/BgShortenMobile.vue";
-  import IconBrand from "../public/images/IconBrand.vue";
-  import IconCustomizable from "../public/images/IconCustomizable.vue";
-  import IconFacebook from "../public/images/IconFacebook.vue";
-  import IconInstagram from "../public/images/IconInstagram.vue";
-  import IconPinterest from "../public/images/IconPinterest.vue";
-  import IconRecords from "../public/images/IconRecords.vue";
-  import IconTwitter from "../public/images/IconTwitter.vue";
-  import IllustrationWork from "../public/images/IllustrationWork.vue";
-  import Logo from "../public/images/Logo.vue";
+  import Logo from "./components/svg/Logo.vue";
+  import IllustrationWork from "./components/svg/IllustrationWork.vue";
+  import BgShortenDesktop from "./components/svg/BgShortenDesktop.vue";
+  import BgShortenMobile from "./components/svg/BgShortenMobile.vue";
+  import IconBrand from "./components/svg/IconBrand.vue";
+  import IconCustomizable from "./components/svg/IconCustomizable.vue";
+  import IconRecords from "./components/svg/IconRecords.vue";
+  import IconFacebook from "./components/svg/conFacebook.vue";
+  import IconInstagram from "./components/svg/IconInstagram.vue";
+  import IconPinterest from "./components/svg/IconPinterest.vue";
+  import IconTwitter from "./components/svg/IconTwitter.vue";
 
   export default {
     name: "App",
