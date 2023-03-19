@@ -27,5 +27,5 @@ coverage
 *.sln
 *.sw?
 
-public/design
+.vscode
 public/style-guide.md
