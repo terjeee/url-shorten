@@ -1,22 +1,28 @@
 <script setup lang="ts">
+  import MaxWidth from "@/components/UX/MaxWidth.vue";
   import Logo from "@/components/svg/Logo.vue";
-  import IconBrand from "@/components/svg/IconBrand.vue";
-  import IconInstagram from "@/components/svg/IconInstagram.vue";
+  import IconFacebook from "@/components/svg/IconFacebook.vue";
   import IconTwitter from "@/components/svg/IconTwitter.vue";
+  import IconInstagram from "@/components/svg/IconInstagram.vue";
 </script>
 
 <template>
   <nav class="nav">
-    <Logo />
+    <MaxWidth>
+      <Logo fill="hsl(255, 11%, 22%)" />
+    </MaxWidth>
   </nav>
+
   <slot></slot>
+
   <footer class="footer">
-    <Logo fill="white" />
-    <div>
-      <IconBrand />
-      <IconInstagram />
-      <IconTwitter />
-    </div>
+    <MaxWidth>
+      <Logo fill="white" />
+      <div>
+        <IconInstagram />
+        <IconTwitter />
+      </div>
+    </MaxWidth>
   </footer>
 </template>
 
@@ -24,11 +30,13 @@
   @use "@/assets/variables.scss";
 
   .nav {
-    padding: 1rem 0;
-    width: 100%;
+    padding: 2.5rem 0;
   }
 
   .footer {
+    padding: 4rem 0;
+    display: flex;
+    justify-content: center;
     background-color: variables.$clr-dark-violet;
   }
 </style>
