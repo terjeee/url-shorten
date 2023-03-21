@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import MaxWidth from "@/components/UX/MaxWidth.vue";
-  import Logo from "@/components/svg/Logo.vue";
-  import IconFacebook from "@/components/svg/IconFacebook.vue";
-  import IconTwitter from "@/components/svg/IconTwitter.vue";
-  import IconInstagram from "@/components/svg/IconInstagram.vue";
+  import MaxWidth from "@/components/ux/MaxWidth.vue";
+  import Logo from "@/components/ux/svg/Logo.vue";
+  import IconFacebook from "@/components/ux/svg/IconFacebook.vue";
+  import IconPinterest from "@/components/ux/svg/IconPinterest.vue";
+  import IconTwitter from "@/components/ux/svg/IconTwitter.vue";
+  import IconInstagram from "@/components/ux/svg/IconInstagram.vue";
 </script>
 
 <template>
@@ -17,11 +18,23 @@
 
   <footer class="footer">
     <MaxWidth>
-      <Logo fill="white" />
-      <div>
-        <IconInstagram />
-        <IconTwitter />
+      <div class="logo">
+        <Logo fill="white" />
       </div>
+      <section class="socials">
+        <a href="https://www.facebook.com" target="_blank">
+          <IconFacebook />
+        </a>
+        <a href="https://www.twitter.com" target="_blank">
+          <IconTwitter />
+        </a>
+        <a href="https://www.pinterest.com" target="_blank">
+          <IconPinterest />
+        </a>
+        <a href="https://www.instagram.com" target="_blank">
+          <IconInstagram />
+        </a>
+      </section>
     </MaxWidth>
   </footer>
 </template>
@@ -35,8 +48,20 @@
 
   .footer {
     padding: 4rem 0;
-    display: flex;
-    justify-content: center;
-    background-color: variables.$clr-dark-violet;
+    background-color: variables.$clr-dark-blue;
+
+    .logo {
+      padding-bottom: 4rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .socials {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+    }
   }
 </style>
