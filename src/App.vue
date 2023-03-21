@@ -1,22 +1,22 @@
 <script setup lang="ts">
-  import Layout from "@/Layout/Layout.vue";
-  import IllustrationWork from "@/components/svg/IllustrationWork.vue";
-  import BgShortenDesktop from "@/components/svg/BgShortenDesktop.vue";
-  import BgShortenMobile from "@/components/svg/BgShortenMobile.vue";
-  import IconBrand from "@/components/svg/IconBrand.vue";
-  import IconRecords from "@/components/svg/IconRecords.vue";
-  import IconCustomizable from "@/components/svg/IconCustomizable.vue";
+  import Layout from "@/layout/Layout.vue";
+  import Introduction from "./components/sections/Introduction.vue";
+  import Application from "./components/sections/Application.vue";
+  import Information from "./components/sections/Information.vue";
 </script>
 
 <template>
   <Layout>
-    <IllustrationWork />
-    <!-- <BgShortenMobile /> -->
-    <!-- <BgShortenDesktop /> -->
-    <!-- <IconRecords /> -->
-    <!-- <IconCustomizable /> -->
-    <!-- <IconBrand /> -->
+    <Introduction />
+    <Application />
+    <Information />
   </Layout>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  @use "@/assets/variables.scss";
+
+  .application {
+    color: red;
+  }
+</style>
