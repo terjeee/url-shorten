@@ -9,7 +9,7 @@
 <style scoped lang="scss">
   .max--width {
     padding: 0 2rem;
-    margin: auto 0;
+    margin: auto;
     max-width: 1200px;
   }
 </style>
