@@ -11,10 +11,13 @@ html {
   body {
     font-family: variables.$font;
     font-size: variables.$font-size;
-    color: variables.$clr-dark-blue;
 
     p {
       color: variables.$clr-grey-violet;
+    }
+
+    li {
+      list-style: none;
     }
   }
 }
