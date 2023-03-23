@@ -2,18 +2,51 @@
   import { ref } from "vue";
   import MaxWidth from "@/components/ux/MaxWidth.vue";
 
-  let links: string[] = [];
+  import type { Ref } from "vue";
+
+  interface Link {
+    original: string;
+    short: string;
+  }
+
+  let links: Ref<Link[]> = ref([]);
   let input = ref("");
+  let inputValid = ref(true);
 
   function getShortenedUrl() {
-    console.log(input);
+    // console.log(input.value.replace(/^https?:\/\//i, "").startsWith("www.").replace("www.", ''));
+    // const inputt = input.value.replace(/^https?:\/\//i, "").startsWith("www.") ? input.value.replace(/https?:\/\//g, "")
 
-    // fetch()
-    // handle response
-    // push response til linnks[]
+    const inputUrl = input.value;
+    const regexUrl = /^(https?:\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*(\.[a-z]{2,})(:[0-9]+)?(\/.*)?$/;
 
-    // input = ":)";
-    $refs.input.reset();
+    if (!regexUrl.test(inputUrl)) return (inputValid.value = false);
+
+    fetch(`https://api.shrtco.de/v2/shorten?url=${inputUrl}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data.ok) throw new Error(data.error);
+
+        const urlOriginal = data.result["original_link"];
+        const urlShort = data.result["short_link"];
+
+        links.value.unshift({ original: urlOriginal.replace("http://", "https://"), short: urlShort });
+        input.value = "";
+        inputValid.value = true;
+
+        if (links.value.length > 0)
+          links.value.forEach((el, index) => {
+            console.log(inputUrl);
+            console.log(el.original);
+          });
+      })
+      .catch((error) => console.log(error));
+  }
+
+  function copyClipboardUrl(event: Event, url: string) {
+    console.log(event);
+    navigator.clipboard.writeText(url);
+    (event.target as HTMLElement).innerText = "Copied!";
   }
 </script>
 
@@ -21,12 +54,30 @@
   <MaxWidth>
     <section class="application">
       <form action="">
-        <input id="id" type="text" v-model="input" placeholder="Shorten link here.." />
+        <div class="form-input">
+          <input
+            id="id"
+            type="text"
+            v-model="input"
+            placeholder="Shorten link here.."
+            autocomplete="off"
+            :class="{ error: inputValid }"
+          />
+          <p v-if="!inputValid" style="padding-top: 0.75rem; color: white; font-size: 13px">⛔ Please enter a valid url.</p>
+        </div>
         <button @click.prevent="getShortenedUrl">Shorten!</button>
       </form>
-      <!-- <ul>
-        <li></li>
-      </ul> -->
+      <ul v-if="links.length > 0">
+        <li v-for="url in links">
+          <div class="text">
+            <p>{{ url.original }}</p>
+            <p>{{ url.short }}</p>
+          </div>
+          <div class="copy">
+            <button @click.prevent="copyClipboardUrl($event, url.short)">Copy</button>
+          </div>
+        </li>
+      </ul>
     </section>
   </MaxWidth>
 </template>
@@ -36,7 +87,7 @@
 
   .application {
     margin-top: 2rem;
-    margin-bottom: 6rem;
+    margin-bottom: 4rem;
 
     form {
       padding: 2.5rem 2rem;
@@ -51,15 +102,20 @@
       background-repeat: no-repeat;
       background-size: fill;
 
-      input {
-        padding: 1.35rem;
-        outline: transparent;
-        font-size: 1.5rem;
-        font-weight: 400;
-        color: variables.$clr-grey-violet;
-        letter-spacing: 1.05px;
-        border-radius: variables.$radius-btn;
-        border: transparent;
+      .form-input {
+        display: flex;
+        flex-direction: column;
+
+        input {
+          padding: 1.35rem;
+          outline: transparent;
+          font-size: 1.5rem;
+          font-weight: 400;
+          color: variables.$clr-grey-violet;
+          letter-spacing: 1.05px;
+          border-radius: variables.$radius-btn;
+          border: transparent;
+        }
       }
 
       button {
@@ -71,6 +127,63 @@
         background-color: variables.$clr-cyan;
         border-radius: variables.$radius-btn;
         border: transparent;
+
+        &:hover {
+          background-color: hsl(180, 66%, 55%);
+        }
+      }
+    }
+
+    ul {
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      li {
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 2.5rem;
+        background-color: variables.$clr-grey;
+
+        .text {
+          width: 100%;
+          padding: 1rem 0;
+          overflow-x: scroll;
+          color: variables.$clr-cyan;
+
+          p {
+            font-size: 1.2rem;
+            color: variables.$clr-dark-violet;
+            // word-wrap: normal;
+          }
+
+          p:nth-child(2) {
+            font-size: 1.6rem;
+            color: variables.$clr-cyan;
+          }
+        }
+
+        .copy {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          button {
+            padding: 0.75rem 1.25rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: variables.$clr-cyan;
+            border-radius: variables.$radius-btn;
+            border: transparent;
+
+            &:hover {
+              background-color: hsl(180, 66%, 55%);
+            }
+          }
+        }
       }
     }
   }
