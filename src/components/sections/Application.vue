@@ -10,21 +10,32 @@
   }
 
   let links: Ref<Link[]> = ref([]);
+
   let input = ref("");
   let inputValid = ref(true);
 
   function getShortenedUrl() {
-    // console.log(input.value.replace(/^https?:\/\//i, "").startsWith("www.").replace("www.", ''));
-    // const inputt = input.value.replace(/^https?:\/\//i, "").startsWith("www.") ? input.value.replace(/https?:\/\//g, "")
-
-    const inputUrl = input.value;
     const regexUrl = /^(https?:\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*(\.[a-z]{2,})(:[0-9]+)?(\/.*)?$/;
+    const inputUrl = input.value.replace(/https?:\/\//g, "").replace(/^www\./i, "");
 
     if (!regexUrl.test(inputUrl)) return (inputValid.value = false);
+
+    if (links.value.length > 0) {
+      const indexDuplicate = links.value.findIndex((el) => el.original.replace(/https?:\/\//g, "") === inputUrl);
+
+      if (indexDuplicate >= 0) {
+        const [linkRemoved] = links.value.splice(indexDuplicate, 1);
+        links.value.unshift(linkRemoved);
+        input.value = "";
+        inputValid.value = true;
+        return;
+      }
+    }
 
     fetch(`https://api.shrtco.de/v2/shorten?url=${inputUrl}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log("fetch");
         if (!data.ok) throw new Error(data.error);
 
         const urlOriginal = data.result["original_link"];
@@ -33,12 +44,6 @@
         links.value.unshift({ original: urlOriginal.replace("http://", "https://"), short: urlShort });
         input.value = "";
         inputValid.value = true;
-
-        if (links.value.length > 0)
-          links.value.forEach((el, index) => {
-            console.log(inputUrl);
-            console.log(el.original);
-          });
       })
       .catch((error) => console.log(error));
   }
@@ -68,7 +73,7 @@
         <button @click.prevent="getShortenedUrl">Shorten!</button>
       </form>
       <ul v-if="links.length > 0">
-        <li v-for="url in links">
+        <li v-for="url in links" :key="Math.floor(Math.random() * 100000) + 1">
           <div class="text">
             <p>{{ url.original }}</p>
             <p>{{ url.short }}</p>
