@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from "vue";
+  import { ref, onMounted, onBeforeMount } from "vue";
   import MaxWidth from "@/components/ux/MaxWidth.vue";
 
   import type { Ref } from "vue";
@@ -10,9 +10,13 @@
   }
 
   let links: Ref<Link[]> = ref([]);
-
   let input = ref("");
   let inputValid = ref(true);
+
+  onBeforeMount(() => {
+    const localData = localStorage.getItem("localLinks");
+    if (localData) links.value = JSON.parse(localData);
+  });
 
   function getShortenedUrl() {
     const regexUrl = /^(https?:\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*(\.[a-z]{2,})(:[0-9]+)?(\/.*)?$/;
@@ -22,10 +26,11 @@
 
     if (links.value.length > 0) {
       const indexDuplicate = links.value.findIndex((el) => el.original.replace(/https?:\/\//g, "") === inputUrl);
-
       if (indexDuplicate >= 0) {
         const [linkRemoved] = links.value.splice(indexDuplicate, 1);
+
         links.value.unshift(linkRemoved);
+        localStorage.setItem("localLinks", JSON.stringify(links.value));
         input.value = "";
         inputValid.value = true;
         return;
@@ -35,13 +40,13 @@
     fetch(`https://api.shrtco.de/v2/shorten?url=${inputUrl}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("fetch");
         if (!data.ok) throw new Error(data.error);
 
         const urlOriginal = data.result["original_link"];
         const urlShort = data.result["short_link"];
 
         links.value.unshift({ original: urlOriginal.replace("http://", "https://"), short: urlShort });
+        localStorage.setItem("localLinks", JSON.stringify(links.value));
         input.value = "";
         inputValid.value = true;
       })
