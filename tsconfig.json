@@ -2,6 +2,7 @@
   "extends": "@vue/tsconfig/tsconfig.web.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
+    "types": ["@vue-macros/reactivity-transform/macros-global" /* ... */],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

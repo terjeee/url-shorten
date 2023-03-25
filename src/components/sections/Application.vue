@@ -2,37 +2,37 @@
   import { ref, onMounted, onBeforeMount } from "vue";
   import MaxWidth from "@/components/ux/MaxWidth.vue";
 
-  import type { Ref } from "vue";
+  import type { ReactiveVariable } from "@vue-macros/reactivity-transform/macros";
 
   interface Link {
     original: string;
     short: string;
   }
 
-  let links: Ref<Link[]> = ref([]);
-  let input = ref("");
-  let inputValid = ref(true);
+  let links: ReactiveVariable<Link[]> = $ref([]);
+  let input = $ref("");
+  let inputValid = $ref(true);
 
   onBeforeMount(() => {
     const localData = localStorage.getItem("localLinks");
-    if (localData) links.value = JSON.parse(localData);
+    if (localData) links = JSON.parse(localData);
   });
 
   function getShortenedUrl() {
     const regexUrl = /^(https?:\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*(\.[a-z]{2,})(:[0-9]+)?(\/.*)?$/;
-    const inputUrl = input.value.replace(/https?:\/\//g, "").replace(/^www\./i, "");
+    const inputUrl = input.replace(/https?:\/\//g, "").replace(/^www\./i, "");
 
-    if (!regexUrl.test(inputUrl)) return (inputValid.value = false);
+    if (!regexUrl.test(inputUrl)) return (inputValid = false);
 
-    if (links.value.length > 0) {
-      const indexDuplicate = links.value.findIndex((el) => el.original.replace(/https?:\/\//g, "") === inputUrl);
+    if (links.length > 0) {
+      const indexDuplicate = links.findIndex((el) => el.original.replace(/https?:\/\//g, "") === inputUrl);
       if (indexDuplicate >= 0) {
-        const [linkRemoved] = links.value.splice(indexDuplicate, 1);
+        const [linkRemoved] = links.splice(indexDuplicate, 1);
 
-        links.value.unshift(linkRemoved);
-        localStorage.setItem("localLinks", JSON.stringify(links.value));
-        input.value = "";
-        inputValid.value = true;
+        links.unshift(linkRemoved);
+        localStorage.setItem("localLinks", JSON.stringify(links));
+        input = "";
+        inputValid = true;
         return;
       }
     }
@@ -45,10 +45,10 @@
         const urlOriginal = data.result["original_link"];
         const urlShort = data.result["short_link"];
 
-        links.value.unshift({ original: urlOriginal.replace("http://", "https://"), short: urlShort });
-        localStorage.setItem("localLinks", JSON.stringify(links.value));
-        input.value = "";
-        inputValid.value = true;
+        links.unshift({ original: urlOriginal.replace("http://", "https://"), short: urlShort });
+        localStorage.setItem("localLinks", JSON.stringify(links));
+        input = "";
+        inputValid = true;
       })
       .catch((error) => console.log(error));
   }
