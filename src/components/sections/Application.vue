@@ -5,6 +5,7 @@
   import type { ReactiveVariable } from "@vue-macros/reactivity-transform/macros";
 
   interface Link {
+    id: number;
     original: string;
     short: string;
   }
@@ -18,6 +19,12 @@
     if (localData) links = JSON.parse(localData);
   });
 
+  const randomId = () => Math.floor(Math.random() * 100000) + 1;
+
+  const setLocalStorageItem = (key: string, data: any) => {
+    localStorage.setItem(key, JSON.stringify(data));
+  };
+
   function getShortenedUrl() {
     const regexUrl = /^(https?:\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*(\.[a-z]{2,})(:[0-9]+)?(\/.*)?$/;
     const inputUrl = input.replace(/https?:\/\//g, "").replace(/^www\./i, "");
@@ -26,11 +33,12 @@
 
     if (links.length > 0) {
       const indexDuplicate = links.findIndex((el) => el.original.replace(/https?:\/\//g, "") === inputUrl);
+
       if (indexDuplicate >= 0) {
         const [linkRemoved] = links.splice(indexDuplicate, 1);
 
         links.unshift(linkRemoved);
-        localStorage.setItem("localLinks", JSON.stringify(links));
+        setLocalStorageItem("localLinks", links);
         input = "";
         inputValid = true;
         return;
@@ -45,8 +53,8 @@
         const urlOriginal = data.result["original_link"];
         const urlShort = data.result["short_link"];
 
-        links.unshift({ original: urlOriginal.replace("http://", "https://"), short: urlShort });
-        localStorage.setItem("localLinks", JSON.stringify(links));
+        links.unshift({ id: randomId(), original: urlOriginal.replace("http://", "https://"), short: urlShort });
+        setLocalStorageItem("localLinks", links);
         input = "";
         inputValid = true;
       })
@@ -54,9 +62,15 @@
   }
 
   function copyClipboardUrl(event: Event, url: string) {
-    console.log(event);
     navigator.clipboard.writeText(url);
     (event.target as HTMLElement).innerText = "Copied!";
+  }
+
+  function deleteUrl(urlId: number) {
+    const link = links.findIndex((el) => el.id === urlId);
+
+    links.splice(link, 1);
+    setLocalStorageItem("localLinks", links);
   }
 </script>
 
@@ -78,13 +92,14 @@
         <button @click.prevent="getShortenedUrl">Shorten!</button>
       </form>
       <ul v-if="links.length > 0">
-        <li v-for="url in links" :key="Math.floor(Math.random() * 100000) + 1">
+        <li v-for="url in links" :key="url.id">
           <div class="text">
             <p>{{ url.original }}</p>
             <p>{{ url.short }}</p>
           </div>
-          <div class="copy">
-            <button @click.prevent="copyClipboardUrl($event, url.short)">Copy</button>
+          <div class="btns">
+            <button id="btn-copy" @click="copyClipboardUrl($event, url.short)">Copy</button>
+            <button id="btn-delete" @click="deleteUrl(url.id)">❌</button>
           </div>
         </li>
       </ul>
@@ -175,22 +190,36 @@
           }
         }
 
-        .copy {
+        .btns {
           display: flex;
-          justify-content: space-between;
+          justify-content: center;
           align-items: center;
+          gap: 1rem;
 
           button {
-            padding: 0.75rem 1.25rem;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #fff;
-            background-color: variables.$clr-cyan;
+            font-size: 1.5rem;
             border-radius: variables.$radius-btn;
             border: transparent;
+            cursor: pointer;
+          }
+
+          #btn-copy {
+            padding: 0.75rem 1.25rem;
+            background-color: variables.$clr-cyan;
+            font-weight: 700;
+            color: #fff;
 
             &:hover {
               background-color: hsl(180, 66%, 55%);
+            }
+          }
+
+          #btn-delete {
+            background-color: transparent;
+            transition: all ease-in-out;
+
+            &:hover {
+              transform: scale(1.25);
             }
           }
         }
