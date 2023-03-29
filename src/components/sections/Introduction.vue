@@ -17,6 +17,7 @@
 
 <style scoped lang="scss">
   @use "@/assets/variables.scss";
+  @use "@/assets/breakpoint.scss";
 
   header {
     .text {
@@ -32,6 +33,12 @@
         padding-top: 1.5rem;
         font-size: variables.$font-size;
       }
+    }
+  }
+
+  @include breakpoint.width(laptop) {
+    header {
+      background-color: red;
     }
   }
 </style>
