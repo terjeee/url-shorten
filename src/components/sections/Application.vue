@@ -108,7 +108,7 @@
 </template>
 
 <style scoped lang="scss">
-  @use "@//assets/variables.scss";
+  @use "@/assets/variables.scss";
 
   .application {
     margin-top: 2rem;
