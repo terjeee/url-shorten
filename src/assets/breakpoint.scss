@@ -1,0 +1,9 @@
+@mixin width($px) {
+  @if $px == laptop {
+    @media (min-width: 480px) {
+      @content;
+    }
+  } @else {
+    @error "Invalid breakpoint name: #{$px}";
+  }
+}
