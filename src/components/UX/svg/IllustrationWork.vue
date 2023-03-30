@@ -2,18 +2,18 @@
 
 <style scoped lang="scss">
   .container {
-    overflow: hidden;
+    max-height: 350px;
+    max-width: 532px;
 
     svg {
       height: 100%;
-      margin-left: 2.5rem;
     }
   }
 </style>
 
 <template>
   <div class="container">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 575 482" width="auto" height="482">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 733 482" width="auto" height="482">
       <defs>
         <linearGradient id="a" x1="0%" x2="100%" y1="50%" y2="50%">
           <stop offset="0%" stop-color="#183866" />
