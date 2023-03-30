@@ -10,6 +10,6 @@
   .max--width {
     padding: 0 2rem;
     margin: auto;
-    max-width: 1200px;
+    max-width: 1000px;
   }
 </style>
