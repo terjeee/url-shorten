@@ -37,7 +37,7 @@
 
       p {
         padding-top: 1rem;
-        padding-right: 2.5rem;
+        padding-right: 4rem;
         font-size: variables.$font-size;
         line-height: 1.5;
       }
