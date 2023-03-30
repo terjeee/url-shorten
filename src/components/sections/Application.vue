@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, onMounted, onBeforeMount } from "vue";
+  import { onBeforeMount } from "vue";
   import MaxWidth from "@/components/ux/MaxWidth.vue";
 
   import type { ReactiveVariable } from "@vue-macros/reactivity-transform/macros";
