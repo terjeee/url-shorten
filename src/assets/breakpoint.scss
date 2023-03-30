@@ -4,6 +4,6 @@
       @content;
     }
   } @else {
-    @error "Invalid breakpoint name: #{$px}";
+    @error "MIN ERROR: Invalid breakpoint name: #{$px}";
   }
 }
