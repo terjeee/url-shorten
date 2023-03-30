@@ -87,10 +87,10 @@
             autocomplete="off"
             :class="{ error: inputValid }"
           />
-          <p v-if="!inputValid" style="padding-top: 0.75rem; color: white; font-size: 13px">⛔ Please enter a valid url.</p>
         </div>
         <button @click.prevent="getShortenedUrl">Shorten!</button>
       </form>
+      <p v-if="!inputValid" style="color: black; padding-top: 1rem; font-size: 13px">⛔ Please enter a valid url.</p>
       <ul v-if="links.length > 0">
         <li v-for="url in links" :key="url.id">
           <div class="text">
@@ -109,6 +109,7 @@
 
 <style scoped lang="scss">
   @use "@/assets/variables.scss";
+  @use "@/assets/breakpoint.scss";
 
   .application {
     margin-top: 2rem;
@@ -127,9 +128,18 @@
       background-repeat: no-repeat;
       background-size: fill;
 
+      @include breakpoint.width(laptop) {
+        display: flex;
+        flex-direction: row;
+      }
+
       .form-input {
         display: flex;
         flex-direction: column;
+
+        @include breakpoint.width(laptop) {
+          width: 80%;
+        }
 
         input {
           padding: 1.35rem;
@@ -140,6 +150,10 @@
           letter-spacing: 1.05px;
           border-radius: variables.$radius-btn;
           border: transparent;
+
+          &inputValid {
+            border: 2px solid red;
+          }
         }
       }
 
@@ -166,7 +180,7 @@
       gap: 1.5rem;
 
       li {
-        padding: 0 1rem;
+        padding: 1rem 2rem;
         display: flex;
         justify-content: space-between;
         gap: 2.5rem;
@@ -181,12 +195,20 @@
           p {
             font-size: 1.2rem;
             color: variables.$clr-dark-violet;
-            // word-wrap: normal;
+
+            @include breakpoint.width(laptop) {
+              font-size: 1.5rem;
+              word-wrap: normal;
+            }
           }
 
           p:nth-child(2) {
             font-size: 1.6rem;
             color: variables.$clr-cyan;
+
+            @include breakpoint.width(laptop) {
+              font-size: 1.8rem;
+            }
           }
         }
 
@@ -201,6 +223,10 @@
             border-radius: variables.$radius-btn;
             border: transparent;
             cursor: pointer;
+
+            @include breakpoint.width(laptop) {
+              font-size: 1.8rem;
+            }
           }
 
           #btn-copy {
