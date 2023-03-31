@@ -7,7 +7,7 @@
 
 <template>
   <section class="info">
-    <MaxWidth>
+    <MaxWidth px="800">
       <div class="header">
         <h4>Advanced Statistics</h4>
         <p>Track how your links are performing across the web with our advanced statistics dashboard.</p>
@@ -56,6 +56,7 @@
 
 <style scoped lang="scss">
   @use "@/assets/variables.scss";
+  @use "@/assets/breakpoint.scss";
 
   .info {
     padding: 8rem 0;
@@ -69,7 +70,11 @@
       text-align: center;
 
       h4 {
-        font-size: 2.4rem;
+        font-size: 2.6rem;
+      }
+
+      p {
+        padding: 0 4rem;
       }
     }
 
@@ -80,7 +85,7 @@
       text-align: center;
 
       article {
-        padding: 0 3rem 4.5rem 3rem;
+        padding: 0 4rem 4.5rem 4rem;
         background-color: #fff;
         border-radius: variables.$radius;
 
