@@ -19,7 +19,9 @@
     if (localData) links = JSON.parse(localData);
   });
 
-  const randomId = () => Math.floor(Math.random() * 100000) + 1;
+  const randomId = () => {
+    return Math.floor(Math.random() * 100000) + 1;
+  };
 
   const setLocalStorageItem = (key: string, data: any) => {
     localStorage.setItem(key, JSON.stringify(data));
@@ -28,15 +30,11 @@
   function getShortenedUrl() {
     const regexUrl = /^(https?:\/\/)?[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*(\.[a-z]{2,})(:[0-9]+)?(\/.*)?$/;
     const inputUrl = input.replace(/https?:\/\//g, "").replace(/^www\./i, "");
-
     if (!regexUrl.test(inputUrl)) return (inputValid = false);
-
     if (links.length > 0) {
       const indexDuplicate = links.findIndex((el) => el.original.replace(/https?:\/\//g, "") === inputUrl);
-
       if (indexDuplicate >= 0) {
         const [linkRemoved] = links.splice(indexDuplicate, 1);
-
         links.unshift(linkRemoved);
         setLocalStorageItem("localLinks", links);
         input = "";
@@ -49,10 +47,8 @@
       .then((response) => response.json())
       .then((data) => {
         if (!data.ok) throw new Error(data.error);
-
         const urlOriginal = data.result["original_link"];
         const urlShort = data.result["short_link"];
-
         links.unshift({ id: randomId(), original: urlOriginal.replace("http://", "https://"), short: urlShort });
         setLocalStorageItem("localLinks", links);
         input = "";
@@ -68,14 +64,13 @@
 
   function deleteUrl(urlId: number) {
     const link = links.findIndex((el) => el.id === urlId);
-
     links.splice(link, 1);
     setLocalStorageItem("localLinks", links);
   }
 </script>
 
 <template>
-  <MaxWidth>
+  <MaxWidth px="800">
     <section class="application">
       <form action="">
         <div class="form-input">
@@ -179,25 +174,35 @@
       flex-direction: column;
       gap: 1.5rem;
 
+      @include breakpoint.width(laptop) {
+        margin: 2rem 0;
+        gap: 2rem;
+      }
+
       li {
-        padding: 1rem 2rem;
+        padding: 0.75rem 2rem;
         display: flex;
         justify-content: space-between;
         gap: 2.5rem;
         background-color: variables.$clr-grey;
+        border-radius: variables.$radius-btn;
 
         .text {
           width: 100%;
-          padding: 1rem 0;
+          padding: 0.75rem 0;
           overflow-x: scroll;
           color: variables.$clr-cyan;
+
+          @include breakpoint.width(laptop) {
+            overflow-x: hidden;
+          }
 
           p {
             font-size: 1.2rem;
             color: variables.$clr-dark-violet;
 
             @include breakpoint.width(laptop) {
-              font-size: 1.5rem;
+              font-size: 1.4rem;
               word-wrap: normal;
             }
           }
@@ -225,7 +230,7 @@
             cursor: pointer;
 
             @include breakpoint.width(laptop) {
-              font-size: 1.8rem;
+              font-size: 1.7rem;
             }
           }
 
