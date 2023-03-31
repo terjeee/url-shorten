@@ -41,20 +41,29 @@
 
 <style scoped lang="scss">
   @use "@/assets/variables.scss";
+  @use "@/assets/breakpoint.scss";
 
   .nav {
     padding: 2.5rem 0;
   }
 
   .footer {
-    padding: 4rem 0;
+    padding: 3.5rem 0;
     background-color: variables.$clr-dark-blue;
+
+    @include breakpoint.width(laptop) {
+      // padding: 2rem 0;
+    }
 
     .logo {
       padding-bottom: 4rem;
       display: flex;
       justify-content: center;
       align-items: center;
+
+      @include breakpoint.width(laptop) {
+        padding-bottom: 3rem;
+      }
     }
 
     .socials {
