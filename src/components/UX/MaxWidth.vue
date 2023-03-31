@@ -1,7 +1,9 @@
-<script setup lang="ts" />
+<script setup lang="ts">
+  const width = defineProps({ px: { type: String, default: "960" } });
+</script>
 
 <template>
-  <div class="max--width">
+  <div class="max--width" :style="{ 'max-width': `${width.px}px` }">
     <slot></slot>
   </div>
 </template>
@@ -10,6 +12,5 @@
   .max--width {
     padding: 0 2rem;
     margin: auto;
-    max-width: 960px;
   }
 </style>
